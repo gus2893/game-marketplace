@@ -24,7 +24,7 @@ export class UsersService {
   }
 
   async updateUserBalance(id: number, balance: number) {
-    const t = await this.userRepository
+    await this.userRepository
       .createQueryBuilder()
       .update(User)
       .set({ token_balance: () => `token_balance + ${balance}` })
