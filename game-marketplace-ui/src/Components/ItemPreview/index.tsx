@@ -24,6 +24,9 @@ export const ItemPreview: React.FC<ItemCardProps> = ({
   const user = useAppSelector(selectUser);
   const date = Number(sale);
 
+  const imgSrc = `https://picsum.photos/200/140?random=${Math.floor(
+    Math.random() * 500,
+  )}`;
   useEffect(() => {
     setTime(timeDiffCalc(date, now));
   }, [now, date]);
@@ -39,9 +42,7 @@ export const ItemPreview: React.FC<ItemCardProps> = ({
         <CardMedia
           component="img"
           height="140"
-          image={`https://picsum.photos/200/140?random=${Math.floor(
-            Math.random() * 500,
-          )}`}
+          image={imgSrc}
           alt="green iguana"
         />
         <CardContent>
