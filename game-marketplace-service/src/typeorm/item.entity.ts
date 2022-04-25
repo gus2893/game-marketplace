@@ -21,7 +21,8 @@ export class Item {
   description: string;
 
   @Column({
-    nullable: false,
+    nullable: true,
+    type: 'decimal',
   })
   price: number;
 
@@ -30,7 +31,7 @@ export class Item {
     nullable: false,
     default: 0,
   })
-  sales_expiry: number;
+  sale: number;
 
   @Column({
     type: 'bigint',

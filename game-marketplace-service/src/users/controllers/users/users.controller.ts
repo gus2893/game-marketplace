@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { ApiQuery } from '@nestjs/swagger';
 import { Response } from 'express';
-import { CreateUserDto } from 'src/users/dto/users.dto';
+import { CreateUserDto, UserCredentialsDto } from 'src/users/dto/users.dto';
 import { UsersService } from 'src/users/services/users/users.service';
 
 @Controller('users')
@@ -27,11 +27,8 @@ export class UsersController {
   }
 
   @Get('id/:id')
-  async findUsersById(
-    @Param('id', ParseIntPipe) id: number,
-    @Res() res: Response,
-  ) {
-    return res.send(this.userService.findUsersById(id));
+  async findUsersById(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.findUsersById(id);
   }
 
   // POST METHODS
@@ -40,6 +37,16 @@ export class UsersController {
   @UsePipes(ValidationPipe)
   async createUsers(@Body() createUser: CreateUserDto) {
     return this.userService.createUser(createUser);
+  }
+
+  @Post('login')
+  @UsePipes(ValidationPipe)
+  async loginUser(@Body() userCredentials: UserCredentialsDto) {
+    const res = await this.userService.validateUser(userCredentials);
+    if (res) {
+      return res;
+    }
+    return;
   }
 
   // POST METHODS

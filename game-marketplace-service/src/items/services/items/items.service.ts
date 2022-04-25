@@ -2,8 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ItemDto } from 'src/items/dto/ItemDto.dto';
 import { Item } from 'src/typeorm';
-import { UsersService } from 'src/users/services/users/users.service';
-import { Repository, MoreThan } from 'typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ItemsService {
@@ -20,36 +19,50 @@ export class ItemsService {
     return await this.itemRepository.find();
   }
 
+  async getItemById(id: number) {
+    return await this.itemRepository.findOne(id);
+  }
+
   async getItemsForSale() {
-    return await this.itemRepository.find({
-      where: {
-        sales_expiry: MoreThan(0),
-      },
-      //We would add pagination here
-      take: 20,
-    });
+    const now = Date.now();
+    return await this.itemRepository
+      .createQueryBuilder()
+      .select('*')
+      .where('sale > :now', { now })
+      .orderBy('sale')
+      .execute();
   }
 
   async getUserItems(user_id: number) {
-    return await this.itemRepository.findAndCount({
-      where: {
-        owner: user_id,
-      },
-      //We would add pagination here
-      take: 20,
-    });
+    return await this.itemRepository
+      .createQueryBuilder()
+      .select('*')
+      .where('owner = :user_id', { user_id })
+      .orderBy('sale')
+      .execute();
   }
 
   async editItem(item: ItemDto) {
     return await this.itemRepository.save(item);
   }
 
+  //update on condition
+  // async update() {
+  //   const t = await this.itemRepository
+  //     .createQueryBuilder()
+  //     .update(Item)
+  //     .set()
+  //     .where('')
+  //     .execute();
+  //   return;
+  // }
+
   async transferItem(item: ItemDto, id: number) {
     return await this.itemRepository.save({
       ...item,
       owner: id,
       price: 0,
-      sales_expiry: 0,
+      sale: 0,
     });
   }
 }

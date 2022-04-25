@@ -16,12 +16,12 @@ export const userSlice = createSlice({
   name: 'User',
   initialState,
   reducers: {
-    updateUser: (state, action: PayloadAction<IUser>) => {
+    updateUser: (state, action: PayloadAction<IUser | undefined>) => {
       state.value = action.payload;
     },
   },
 });
 
 export const { updateUser } = userSlice.actions;
-export const selectuser = (state: RootState) => state.user.value;
+export const selectUser = (state: RootState) => state.user.value;
 export default userSlice.reducer;

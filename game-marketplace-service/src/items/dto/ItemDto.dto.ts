@@ -15,7 +15,7 @@ export class ItemDto {
   price: number;
 
   @IsNotEmpty()
-  sales_expiry: number;
+  sale: number;
 
   @IsNotEmpty()
   owner: number;

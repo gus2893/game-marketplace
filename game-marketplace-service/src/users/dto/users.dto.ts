@@ -1,5 +1,4 @@
-import { IsCurrency, IsEmail, IsNotEmpty, MinLength } from 'class-validator';
-import { Exclude } from 'class-transformer';
+import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -15,4 +14,14 @@ export class CreateUserDto {
   email: string;
 
   token_balance: number;
+}
+
+export class UserCredentialsDto {
+  @IsNotEmpty()
+  @MinLength(8)
+  password: string;
+
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
 }

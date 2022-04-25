@@ -32,9 +32,14 @@ export class ItemsController {
     return this.itemsService.getItemsForSale();
   }
 
-  @Get('user/:id')
-  async getUserItems(@Param('id', ParseIntPipe) id: number) {
-    return this.itemsService.getUserItems(id);
+  @Get('id/:item_Id')
+  async getItemById(@Param('item_Id', ParseIntPipe) item_Id: number) {
+    return this.itemsService.getItemById(item_Id);
+  }
+
+  @Get('user/:user_id')
+  async getUserItems(@Param('user_id', ParseIntPipe) user_id: number) {
+    return this.itemsService.getUserItems(user_id);
   }
 
   // POST METHODS
@@ -42,7 +47,19 @@ export class ItemsController {
   @Post('create')
   @UsePipes(ValidationPipe)
   async createItem(@Body() createItem: ItemDto) {
-    return this.itemsService.createItem(createItem);
+    const creatorId = createItem.owner;
+    const tax = createItem.price * 0.05;
+    // making sure user has enough to create an item
+    const creator = await this.usersService.findUsersById(creatorId);
+    if (creator.token_balance < tax) throw Error('Not enough to add item');
+
+    //updating creators account
+    const creatorUpdated = await this.usersService.updateUserBalance(
+      creatorId,
+      -tax,
+    );
+    const item = this.itemsService.createItem(createItem);
+    return { item, user: creatorUpdated };
   }
 
   //PUT METHODS
@@ -50,7 +67,7 @@ export class ItemsController {
   @Put('id/:id')
   @UsePipes(ValidationPipe)
   async editItem(@Param('id', ParseIntPipe) id: number, @Body() item: ItemDto) {
-    if (id !== item.id) throw Error('Cannot update this item');
+    if (id !== Number(item.id)) throw Error('Cannot update this item');
     return this.itemsService.editItem(item);
   }
 
@@ -60,14 +77,23 @@ export class ItemsController {
     @Param('user_id', ParseIntPipe) user_id: number,
     @Body() item: ItemDto,
   ) {
-    // SHOULD CHECK IF USER HAS ENOUGH BALANCE BEFORE PERFORMING THIS OPERATIONS
-    // WILL BE CHECKED IN THE FRONT END FOR NOW
-    await this.usersService.updateUserBalance(item.owner, item.price);
-    const buyer = await this.usersService.updateUserBalance(
+    //making sure the buyer has enough to buy the item
+    const buyer = await this.usersService.findUsersById(user_id);
+    if (buyer.token_balance < item.price) throw Error('Nice Try xD');
+
+    const taxedValue = item.price - item.price * 0.05;
+    //updating the sellers account
+    await this.usersService.updateUserBalance(item.owner, taxedValue);
+
+    //updating buyers account
+    const updatedBuyer = await this.usersService.updateUserBalance(
       user_id,
       -item.price,
     );
+
+    //transfering the item
     const updatedItem = await this.itemsService.transferItem(item, user_id);
-    return { item: updatedItem, user: buyer };
+
+    return { item: updatedItem, user: updatedBuyer };
   }
 }
