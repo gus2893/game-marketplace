@@ -22,11 +22,12 @@ export const ItemPreview: React.FC<ItemCardProps> = ({
   const { name, description, price, sale, item_id, owner } = item;
   const [time, setTime] = useState<string>('');
   const user = useAppSelector(selectUser);
+  const date = Number(sale);
+
   useEffect(() => {
     setTime(timeDiffCalc(date, now));
-  }, [now]);
+  }, [now, date]);
 
-  const date = Number(sale);
   return (
     <Card
       sx={{
@@ -48,7 +49,7 @@ export const ItemPreview: React.FC<ItemCardProps> = ({
             {name}
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            Hello {description}
+            {description}
           </Typography>
         </CardContent>
         <CardActions sx={{ justifyContent: 'space-around' }}>
