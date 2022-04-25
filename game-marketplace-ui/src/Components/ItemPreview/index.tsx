@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -21,12 +21,14 @@ export const ItemPreview: React.FC<ItemCardProps> = ({
 }) => {
   const { name, description, price, sale, item_id, owner } = item;
   const [time, setTime] = useState<string>('');
+  const [img, setImg] = useState<string>('');
   const user = useAppSelector(selectUser);
   const date = Number(sale);
 
-  const imgSrc = `https://picsum.photos/200/140?random=${Math.floor(
-    Math.random() * 500,
-  )}`;
+  useEffect(() => {
+    fetch(`https://picsum.photos/200`).then((r) => setImg(r.url));
+  }, []);
+
   useEffect(() => {
     setTime(timeDiffCalc(date, now));
   }, [now, date]);
@@ -42,7 +44,7 @@ export const ItemPreview: React.FC<ItemCardProps> = ({
         <CardMedia
           component="img"
           height="140"
-          image={imgSrc}
+          image={img}
           alt="green iguana"
         />
         <CardContent>

@@ -10,7 +10,7 @@ import {
 } from '../../interfaces';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'https://game-marketplace-service.herokuapp.com',
+  baseUrl: 'http://localhost:5000',
   prepareHeaders: (headers) => {
     return headers;
   },
