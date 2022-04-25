@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { AppBar, Grid, Button, Typography, Toolbar, Box } from '@mui/material';
 import { selectUser, updateUser } from '../../redux/reducers/userSlice';
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';

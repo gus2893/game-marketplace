@@ -8,7 +8,7 @@ export const Items = () => {
 
   useEffect(() => {
     refetch();
-  }, []);
+  });
 
   return (
     <Container sx={{ textAlign: 'center' }}>

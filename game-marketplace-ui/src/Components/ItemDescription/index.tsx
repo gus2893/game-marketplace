@@ -28,7 +28,7 @@ export const ItemDescription: React.FC<ItemDescriptionProps> = ({ item }) => {
               src={`https://picsum.photos/500/200?random=${Math.floor(
                 Math.random() * 5000,
               )}`}
-              alt="random image"
+              alt="random"
               loading="lazy"
             />
           </Grid>

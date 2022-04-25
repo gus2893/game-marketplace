@@ -31,7 +31,7 @@ export const AddItem = () => {
       if (data?.user) dispatch(updateUser(data.user));
       navigation('/items');
     }
-  }, [isSuccess]);
+  }, [isSuccess, data, dispatch, navigation]);
 
   // FUNCTIONS
   const setError = (

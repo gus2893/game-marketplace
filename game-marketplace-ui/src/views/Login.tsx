@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   TextField,
@@ -10,8 +10,7 @@ import {
 import { useLoginUserMutation } from '../redux/api/apiSlice';
 import { updateUser } from '../redux/reducers/userSlice';
 import { useNavigate } from 'react-router-dom';
-import { useAddItemMutation } from '../redux/api/apiSlice';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { useAppDispatch } from '../redux/hooks';
 
 export const Login = () => {
   const [logUser, result] = useLoginUserMutation();
@@ -29,7 +28,7 @@ export const Login = () => {
     } else if (result.isError) {
       setError('Invalid credentials');
     }
-  }, [result, dispatch]);
+  }, [result, dispatch, navigation]);
 
   const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);

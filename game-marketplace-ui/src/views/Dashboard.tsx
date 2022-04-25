@@ -15,7 +15,7 @@ export const Dashboard = () => {
 
   useEffect(() => {
     if (user) refetch();
-  }, [user]);
+  }, [user, refetch]);
 
   return (
     <Container sx={{ textAlign: 'center' }}>

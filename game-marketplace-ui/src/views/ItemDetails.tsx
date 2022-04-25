@@ -22,7 +22,7 @@ export const ItemDetails = () => {
 
   useEffect(() => {
     if (itemId) getItem(itemId);
-  }, [itemId]);
+  }, [itemId, getItem]);
 
   useEffect(() => {
     if (transferResults.isSuccess && transferResults.data.user) {
@@ -31,7 +31,7 @@ export const ItemDetails = () => {
       navigation('/');
     }
     if (editItemResults.isSuccess) navigation('/');
-  }, [transferResults, editItemResults]);
+  }, [transferResults, editItemResults, dispatch, navigation]);
 
   const buyItem = () => {
     if (user && data) {

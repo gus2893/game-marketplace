@@ -30,7 +30,7 @@ export const Register = () => {
     } else if (result.isError) {
       setError('Invalid credentials');
     }
-  }, [result, dispatch]);
+  }, [result, dispatch, navigation]);
 
   const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
